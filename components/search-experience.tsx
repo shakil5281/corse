@@ -46,9 +46,9 @@ const RecordCard = React.memo(function RecordCard({
   const qLower = query.trim().toLowerCase()
   return (
     <Card
-      className="overflow-hidden hover:shadow-md hover:border-primary/20 transition-all duration-200 group will-change-transform"
+      className="overflow-hidden hover:shadow-md hover:border-primary/20 transition-[transform,box-shadow,border-color] duration-[320ms] ease-[cubic-bezier(0.16,1,0.3,1)] group will-change-transform transform-gpu animate-[card-enter_560ms_cubic-bezier(0.16,1,0.3,1)_both]"
       style={{
-        animationDelay: `${Math.min(index * 18, 260)}ms`,
+        animationDelay: `${Math.min(index * 28, 280)}ms`,
       }}
     >
       <CardContent className="p-4 sm:p-5">
@@ -236,12 +236,12 @@ export default function SearchExperience({ data }: { data: WeightRecord[] }) {
         />
       </div>
 
-      {/* Sticky Top Search Bar */}
+      {/* Sticky Top Search Bar — ultra-smooth: transform+opacity only, spring easing, GPU accelerated */}
       <div
         className={cn(
-          "sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60",
-          "transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] will-change-transform",
-          isOpen ? "translate-y-0 opacity-100 pointer-events-auto" : "-translate-y-[110%] opacity-0 pointer-events-none"
+          "sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60 will-change-transform transform-gpu",
+          "transition-[transform,opacity] duration-[650ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
+          isOpen ? "translate-y-0 opacity-100 pointer-events-auto" : "translate-y-[-105%] opacity-0 pointer-events-none"
         )}
         aria-hidden={!isOpen}
       >
@@ -332,14 +332,22 @@ export default function SearchExperience({ data }: { data: WeightRecord[] }) {
         </div>
       </div>
 
-      <div className={cn("transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]", isOpen ? "pt-2 sm:pt-6" : "pt-0")}>
-        {/* Hero */}
+      <div className={cn("transition-[padding] duration-[650ms] ease-[cubic-bezier(0.16,1,0.3,1)]", isOpen ? "pt-2 sm:pt-6" : "pt-0")}>
+        {/* Hero — grid row animation for perfectly smooth height collapse (no max-h jank), transform+opacity only */}
         <div
           className={cn(
-            "mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] will-change-transform",
-            isOpen ? "max-h-0 opacity-0 overflow-hidden pointer-events-none -translate-y-4" : "max-h-[1400px] opacity-100 translate-y-0"
+            "mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 grid will-change-transform transform-gpu transition-[grid-template-rows,opacity] duration-[750ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
+            isOpen ? "grid-rows-[0fr] opacity-0 pointer-events-none" : "grid-rows-[1fr] opacity-100"
           )}
+          style={{ gridTemplateRows: isOpen ? "0fr" : "1fr" }}
         >
+          <div className="overflow-hidden">
+            <div
+              className={cn(
+                "will-change-transform transform-gpu transition-[transform,opacity] duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
+                isOpen ? "-translate-y-8 scale-[0.98] opacity-0" : "translate-y-0 scale-100 opacity-100"
+              )}
+            >
           <div className="relative overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] border bg-gradient-to-b from-muted/50 via-background to-background mt-6 sm:mt-10">
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] sm:bg-[size:32px_32px]" />
             <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
@@ -361,9 +369,9 @@ export default function SearchExperience({ data }: { data: WeightRecord[] }) {
               <div className="mt-8 sm:mt-10 flex flex-col items-center gap-4">
                 <button
                   onClick={handleOpen}
-                  className="group relative inline-flex items-center justify-center gap-3 rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/25 hover:bg-primary/90 active:scale-[0.98] transition-all duration-300 px-8 py-4 sm:px-10 sm:py-5 text-base sm:text-lg font-semibold will-change-transform"
+                  className="group relative inline-flex items-center justify-center gap-3 rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/25 hover:bg-primary/90 active:scale-[0.97] hover:scale-[1.015] px-8 py-4 sm:px-10 sm:py-5 text-base sm:text-lg font-semibold will-change-transform transform-gpu transition-[transform,box-shadow,background] duration-[380ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
                 >
-                  <span className="size-9 sm:size-10 rounded-full bg-white/15 grid place-items-center group-hover:bg-white/20 transition-colors">
+                  <span className="size-9 sm:size-10 rounded-full bg-white/15 grid place-items-center group-hover:bg-white/20 transition-colors duration-300">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="11" cy="11" r="7" />
                       <path d="m20 20-3.5-3.5" />
@@ -423,12 +431,12 @@ export default function SearchExperience({ data }: { data: WeightRecord[] }) {
             {isInitialLoading ? (
               <SearchSkeletonGrid count={6} />
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 animate-in fade-in duration-700">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {data.slice(0, 6).map((row, i) => (
                   <Card
                     key={i}
-                    className="overflow-hidden hover:shadow-md transition-shadow animate-in fade-in slide-in-from-bottom-2 duration-500"
-                    style={{ animationDelay: `${i * 70}ms` }}
+                    className="overflow-hidden hover:shadow-md will-change-transform transform-gpu transition-[transform,box-shadow] duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] animate-[card-enter_560ms_cubic-bezier(0.16,1,0.3,1)_both]"
+                    style={{ animationDelay: `${i * 55}ms` }}
                   >
                     <CardContent className="p-4 sm:p-5 space-y-3">
                       <div className="flex items-start justify-between gap-2">
@@ -453,9 +461,17 @@ export default function SearchExperience({ data }: { data: WeightRecord[] }) {
               </div>
             )}
           </div>
+            </div>
+          </div>
         </div>
 
-        {/* Results Section */}
+        {/* Results Section — ultra-smooth fade + lift, spring easing, GPU only */}
+        <div
+          className={cn(
+            "will-change-transform transform-gpu transition-[opacity,transform] duration-[650ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
+            isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3 pointer-events-none"
+          )}
+        >
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-10 sm:pb-16">
           {!isOpen ? null : !showResults ? (
             <div className="mt-6 sm:mt-10 animate-in fade-in slide-in-from-top-2 duration-500">
@@ -600,6 +616,7 @@ export default function SearchExperience({ data }: { data: WeightRecord[] }) {
               </p>
             </>
           )}
+        </div>
         </div>
       </div>
 

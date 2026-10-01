@@ -129,14 +129,22 @@
   }
 }
 
-/* — Performance + smooth loading animations — */
+/* — High-quality smooth animation only — no color combos — */
 @keyframes shimmer {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
 @keyframes card-enter {
-  from { opacity: 0; transform: translateY(6px) scale(0.99); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: translateY(10px) scale(0.985); filter: blur(2px); }
+  to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+@keyframes search-bar-in {
+  from { opacity: 0; transform: translateY(-18px) scale(0.98); filter: blur(4px); }
+  to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+@keyframes search-bar-out {
+  from { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+  to { opacity: 0; transform: translateY(-18px) scale(0.98); filter: blur(4px); }
 }
 @keyframes skeleton-shimmer {
   0% { transform: translateX(-100%); }
@@ -162,5 +170,6 @@
 .scrollbar-none { scrollbar-width: none; -ms-overflow-style: none; }
 .scrollbar-none::-webkit-scrollbar { display: none; }
 
-/* will-change hints for smooth 60fps */
-.will-change-transform { will-change: transform; }
+/* will-change hints for smooth 60fps — transform + opacity only */
+.will-change-transform { will-change: transform, opacity; }
+.transform-gpu { transform: translateZ(0); backface-visibility: hidden; }
